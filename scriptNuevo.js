@@ -1,5 +1,6 @@
 let bandera = 0;
 let espada = 0;
+let final;
 let salir = false;
 let muerte = false;
 let victoria = false;
@@ -7,15 +8,32 @@ let logrosTotales = 0;
 let puntaje = 0;
 let turnoContador = 0;
 let turno = "";
-let nombre = prompt(
-  "¡Una cordial bienvenida!\n\nPara comenzar, introduce tu nombre aquí debajo. ¡No te preocupes! No estarás firmando ningún contrato...\nPor ahora."
-);
+let turnoHuida = 0;
 let logBruja = [];
 let logDragon = [];
-
 let logros = [`\n- *`, `\n- *`, `\n- *`, `\n- *`, `\n- *`, `\n- *`];
 let logrosID = [false, false, false, false, false, false];
+let comienzo = new Date();
 
+let antesDeNombre = prompt(
+  `¡Una cordial bienvenida!\n\nQuisiera saber como puedo dirigirme a ti, ¿puedo llamarte Sir? ¿O debo llamarte Lady? Quizás simplemente debería pedirte el nombre, pero aquí en este reino tenemos esto tan cordial... tu dime.\n\nIngresa "Sir" o "Lady" o simplemente déjalo en blanco.`
+);
+if (antesDeNombre === 0 || antesDeNombre === null) {
+  antesDeNombre = false;
+  alert(`De acuerdo, no utilizaré ningún título para dirigirme a ti.`);
+} else if (antesDeNombre.toUpperCase() == "SIR") {
+  antesDeNombre = "Sir";
+  alert(`¡Ahora sí! Bienvenido, Sir.`);
+} else if (antesDeNombre.toUpperCase() == "LADY") {
+  antesDeNombre = "Lady";
+  alert(`¡Ahora sí! Bienvenida, Lady.`);
+} else {
+  antesDeNombre = false;
+  alert(`Mejor no utilizo ningún título, ¿te parece?`);
+}
+let nombre = prompt(
+  `Introduce tu nombre aquí debajo. ¡No te preocupes! No estarás firmando ningún contrato...\n\nPor ahora.`
+);
 while ((nombre == "" || nombre == null) && bandera < 2) {
   nombre = prompt(
     "¡No quieras escaparte! Necesito tu nombre, prometo que no es para realizar un hechizo.\n\nPor favor, introduce tu nombre."
@@ -23,22 +41,29 @@ while ((nombre == "" || nombre == null) && bandera < 2) {
   bandera++;
 }
 if (bandera == 2) {
-  nombre = "Anónimo";
+  if (antesDeNombre) {
+    nombre = `${antesDeNombre} Anónimo`;
+  } else {
+    nombre = `Anónimo`;
+  }
   registroLogro("Nombre");
 
   alert(
-    `Parece que no confias en mi, no empezamos bien entonces. Te llamaré de ahora en más, Sir ${nombre}.`
+    `Parece que no confias en mi, no empezamos bien entonces. Te llamaré de ahora en más, ${nombre}.`
   );
+} else if (antesDeNombre) {
+  nombre = `${antesDeNombre} ${nombre}`;
 }
 
 let inventario = {
-  nombre: `Sir ${nombre}`,
+  nombre,
   health: 10,
   iniciativa: 2,
   combat: 5,
   defensa: 3,
   coins: 0,
 };
+let healthBase = inventario.health;
 let bruja = {
   nombre: "Bruja",
   health: 2,
@@ -49,16 +74,16 @@ let bruja = {
 
 let dragon = {
   nombre: "Dragón",
-  health: 2,
+  health: 1,
   iniciativa: 5,
-  combat: 10,
+  combat: 1,
   defensa: 1,
 };
 
 let caminos = [
   {
     id: 0,
-    descripcion: `Sir ${nombre}, ¡un gusto conocerte! Has llegado en el momento indicado, necesitamos tu ayuda.\n\nDebes saber que en nuestro reino, Javascra, una terrible amenaza acecha en el temible castillo que tenemos delante.\n\nMira, te mostraré. Sígueme.`,
+    descripcion: `${nombre}, ¡un gusto conocerte! Has llegado en el momento indicado, necesitamos tu ayuda.\n\nDebes saber que en nuestro reino, Javascra, una terrible amenaza acecha en el temible castillo que tenemos delante.\n\nMira, te mostraré. Sígueme.`,
     categoria: "Intro",
     input: false,
     cantidadOpciones: 0,
@@ -90,7 +115,7 @@ let caminos = [
   },
   {
     id: 0.4,
-    descripcion: `En fin, Sir ${nombre}, ¡necesitamos de tu ayuda!`,
+    descripcion: `En fin, ${nombre}, ¡necesitamos de tu ayuda!`,
     categoria: "Intro",
     input: false,
     cantidadOpciones: 0,
@@ -106,7 +131,7 @@ let caminos = [
   },
   {
     id: 1,
-    descripcion: `'El Bosque Encantado: Donde los árboles susurran secretos y la magia cobra vida.'\nLo cierto es que nunca escuché a un árbol susurrar, pero igualmente, deberías tener cuidado.\n\nSir ${nombre}, encuentras a tu izquierda la continuación del bosque. Una dulce voz te llama la atención. A tu derecha, sin embargo, una lúgubre cabaña te invita a pasar.`,
+    descripcion: `'El Bosque Encantado: Donde los árboles susurran secretos y la magia cobra vida.'\nLo cierto es que nunca escuché a un árbol susurrar, pero igualmente, deberías tener cuidado.\n\n${nombre}, encuentras a tu izquierda la continuación del bosque. Una dulce voz te llama la atención. A tu derecha, sin embargo, una lúgubre cabaña te invita a pasar.`,
     categoria: "Bosque",
     input: false,
     cantidadOpciones: 0,
@@ -135,7 +160,7 @@ let caminos = [
     categoria: "Bosque",
     input: false,
     cantidadOpciones: 0,
-    nextid: [10],
+    nextid: [4],
   },
   {
     id: 1.2,
@@ -163,7 +188,7 @@ let caminos = [
   },
   {
     id: 1.31,
-    descripcion: `Debes escoger tu acción. \n\n0. Huir \n1. Pelear`,
+    descripcion: `Debes escoger tu acción. \n\n0. Huir \n1. Pelear\n\nLa bruja tiene ${bruja.health} puntos de vida.`,
     categoria: "Bosque",
     input: true,
     cantidadOpciones: 2,
@@ -185,7 +210,7 @@ let caminos = [
     categoria: "Bosque",
     input: false,
     cantidadOpciones: 0,
-    nextid: [10],
+    nextid: [4],
   },
   {
     id: 1.34,
@@ -206,7 +231,7 @@ let caminos = [
   },
   {
     id: 2,
-    descripcion: `Ya estamos en la recta final de la aventura. Recuerda, no hay vuelta atrás. De aquí salimos con la victoria o con la muerte, ¡pero a no desesperar, Sir ${nombre}! Confio plenamente en ti y en tus habilidades.`,
+    descripcion: `Ya estamos en la recta final de la aventura. Recuerda, no hay vuelta atrás. De aquí salimos con la victoria o con la muerte, ¡pero a no desesperar, ${nombre}! Confio plenamente en ti y en tus habilidades.`,
     categoria: "Castillo",
     input: false,
     cantidadOpciones: 0,
@@ -247,15 +272,15 @@ let caminos = [
   },
   {
     id: 2.5,
-    descripcion: `Debes escoger tu camino. \n\n1. Enfrentar al dragón.\n2. Escapar del dragón.`,
+    descripcion: `Debes escoger tu camino.\n\n1. Escapar del dragón.\n2. Enfrentar al dragón.\n`,
     categoria: "Castillo",
     input: true,
     cantidadOpciones: 2,
-    nextid: [2.6, 2.8],
+    nextid: [2.8, 2.6],
   },
   {
     id: 2.6,
-    descripcion: `El dragón se ve feroz, ¡pero nada como la valentía de Sir ${nombre} para enfrentarlo! Te preparas para la gran batalla final.`,
+    descripcion: `El dragón se ve feroz, ¡pero nada como la valentía de ${nombre} para enfrentarlo! Te preparas para la gran batalla final.`,
     categoria: "Castillo",
     input: false,
     cantidadOpciones: 0,
@@ -263,7 +288,7 @@ let caminos = [
   },
   {
     id: 2.7,
-    descripcion: `Debes escoger tu acción. \n\n0. Huir \n1. Pelear`,
+    descripcion: `Debes escoger tu acción. \n\n0. Huir \n1. Pelear\n\nEl dragón tiene ${dragon.health} puntos de vida.`,
     categoria: "Castillo",
     input: true,
     cantidadOpciones: 2,
@@ -285,20 +310,36 @@ let caminos = [
     categoria: "Castillo",
     input: false,
     cantidadOpciones: 0,
-    nextid: [10],
+    nextid: [4],
   },
   {
     id: 2.74,
-    descripcion: `¡Has derrotado al dragón! La gloria será por siempre tuya. ¡Felicidades! El reino de Javastra te debe tu vida. Vivirás el resto de tus días siendo honrado y tienes un honorifico título. ¡Hurra Sir ${nombre}!\n\nFIN DEL JUEGO.`,
+    descripcion: `¡Has derrotado al dragón! La gloria será por siempre tuya. ¡Felicidades! El reino de Javastra te debe tu vida. Vivirás el resto de tus días siendo honrado y tienes un honorifico título. ¡Hurra ${nombre}!\n\nFIN DEL JUEGO.`,
     categoria: "Castillo",
     input: false,
     cantidadOpciones: 0,
-    nextid: [10],
+    nextid: [4],
   },
-
+  {
+    id: 2.8,
+    descripcion: `¡Huye!\n`,
+    categoria: "Castillo",
+    input: false,
+    cantidadOpciones: 0,
+    nextid: [2.8, 4, 2.81],
+    especial: "Huida",
+  },
+  {
+    id: 2.81,
+    descripcion: `¡Has logrado huir! No pudiste con el dragón. Si bien no has salido con la gloria, has logrado conservar tu vida. Vivirás el resto de tus días escondido.\n\nFIN DEL JUEGO.`,
+    categoria: "Castillo",
+    input: false,
+    cantidadOpciones: 0,
+    nextid: [4],
+  },
   {
     id: 3,
-    descripcion: `'Muelle Javastra: Venga a nuestro hermoso mercado.'\nSir ${nombre}, te encuentras frente a una gran cantidad de tiendas que te llaman la atención. \n\nEn uno de los puestos de tu izquierda, un hombre te saluda efusivamente para que te acerques. A tu derecha, tienes el muelle en todo su esplendor.`,
+    descripcion: `'Muelle Javastra: Venga a nuestro hermoso mercado.'\n${nombre}, te encuentras frente a una gran cantidad de tiendas que te llaman la atención. \n\nEn uno de los puestos de tu izquierda, un hombre te saluda efusivamente para que te acerques. A tu derecha, tienes el muelle en todo su esplendor.`,
     categoria: "Muelle",
     input: false,
     cantidadOpciones: 0,
@@ -332,7 +373,7 @@ let caminos = [
   },
   {
     id: 3.4,
-    descripcion: `'¡Muchas gracias! Sir ${nombre}, usted ha hecho una fantástica compra! Vuelva pronto.'`,
+    descripcion: `'¡Muchas gracias! ${nombre}, usted ha hecho una fantástica compra! Vuelva pronto.'`,
     categoria: "Muelle",
     input: false,
     cantidadOpciones: 0,
@@ -367,12 +408,12 @@ let caminos = [
   },
 
   {
-    id: 10,
-    descripcion: `Haz perdido, aquí tus logros, tu nombre, tu puntaje, etc`,
+    id: 4,
+    descripcion: `¡El juego ha terminado! A continuación verás tu puntaje final y tus logros, veamos...`,
     categoria: "Fin",
     input: false,
     cantidadOpciones: 0,
-    nextid: [11],
+    nextid: [],
     especial: "Fin",
   },
 ];
@@ -385,11 +426,38 @@ index = 0;
 id = 0;
 
 inputChecker(caminos);
+if (ingreso == 13) {
+  alert(
+    `Javastra no olvidará tu nombre. Esto traerá años de mala suerte en nuestro reino. \n\nNos has traicionado. Adiós, ${nombre}`
+  );
+} else {
+  for (let index = 0; index < logros.length; index++) {
+    logros[index] = logros[index].replace(`*`, `LOGRO BLOQUEADO.`);
+  }
+
+  let tiempoTotal = final - comienzo;
+  tiempoTotal = Math.round(tiempoTotal / 1000);
+  let unidad = `segundos`;
+  if (tiempoTotal > 120) {
+    tiempoTotal = Math.round(tiempoTotal / 60);
+    unidad = `minutos`;
+  }
+  alert(
+    `Has conseguido un puntaje total de ${puntaje}/100.\n\nLogros obtenidos durante la aventura:\n${logros.join(
+      " "
+    )}\n\nObtuviste un total de ${logrosTotales} de ${
+      logros.length
+    } logros.\n\nEl tiempo total de aventura fue de ${tiempoTotal} ${unidad}.`
+  );
+
+  if (puntaje == 100) {
+    alert(
+      `¡JUEGO PERFECTO EN PUNTAJE! Felicidades, ${nombre}, tu nombre será recordado, lamentablemente, por poco tiempo, porque nos quedamos sin tinta para ponerlo en los registros del pueblo.\n\nSin embargo, siempre puedes sacar un ScreenShot de tu resultado y enviarmela.\n\n¡Gracias por jugar!`
+    );
+  }
+}
 
 function inputChecker(arrayInput) {
-  console.log("salir" + salir);
-  console.log("undex" + index);
-  console.log("id actual" + arrayInput[index].id);
   idACambiar = -1;
   chequeoInput = false;
   eliminar = false;
@@ -409,7 +477,7 @@ function inputChecker(arrayInput) {
         descripcionEspecial = `Ya exploraste este lugar, te recomiendo que busques en otro lado.`;
         idACambiar = arrayInput[index].id;
         eliminar = true;
-        console.log("id a Eliminar" + idACambiar);
+        puntaje = puntaje + 10;
 
         break;
       case "Combate Bruja":
@@ -428,7 +496,7 @@ function inputChecker(arrayInput) {
           turno = "";
           turnoContador = 0;
 
-          //FALTA SUBIR DE NIVEL
+          inventario.health = healthBase + 5;
         }
         break;
       case "Log Bruja":
@@ -445,14 +513,13 @@ function inputChecker(arrayInput) {
         break;
       case "Soga":
         idACambiar = 3.2;
-        descripcionEspecial = `'Buenos días, Sir ${nombre}, recuerde que ya no tengo nada para ofrecerle. Solo quería entablar una conversación con usted.`;
+        descripcionEspecial = `"Buenos días, ${nombre}, recuerde que ya no tengo nada para ofrecerle. Solo quería entablar una conversación con usted."`;
         eliminar = true;
         modificarNextId(arrayInput, idACambiar, [3.1]);
         inventario.soga = true;
         break;
       case "Espada":
         espada++;
-        console.log(espada);
         if (espada == 2) {
           idACambiar = 3.5;
 
@@ -475,11 +542,13 @@ function inputChecker(arrayInput) {
         alert("...");
         alert("...");
         alert("...");
-        //FALTA INCREMENTO DE FUERZA
+
+        inventario.combat = inventario.combat + 5;
         break;
       case "Puente":
         if (inventario.soga) {
           arrayInput[index].nextid[0] = arrayInput[index].nextid[1];
+          registroLogro("Puente");
         } else {
           inventario.health = inventario.health - 3;
         }
@@ -487,9 +556,6 @@ function inputChecker(arrayInput) {
       case "Combate Dragón":
         combate(dragon);
         logDragon.push(turno);
-        console.log(turno);
-        console.log(muerte);
-        console.log(victoria);
         if (muerte) {
           arrayInput[index].nextid[0] = arrayInput[index].nextid[1];
         } else if (victoria) {
@@ -502,9 +568,32 @@ function inputChecker(arrayInput) {
         descripcionEspecial = arrayInput[index].descripcion + `\n` + turno;
         idACambiar = arrayInput[index].id;
         break;
+      case "Huida":
+        turnoHuida++;
+        inventario.health =
+          inventario.health - Math.ceil((Math.random() * dragon.combat) / 2);
+
+        if (inventario.health <= 0 && turnoHuida <= 5) {
+          arrayInput[index].nextid[0] = arrayInput[index].nextid[1];
+          descripcionEspecial = `¡El dragón te ha derrotado! Te has quedado sin vida.\n\nFIN DEL JUEGO.`;
+          antesDeLogica = true;
+          idACambiar = 2.8;
+        } else if (inventario.health > 0 && turnoHuida <= 5) {
+          descripcionEspecial =
+            arrayInput[index].descripcion +
+            `\n Turno ${turnoHuida} + ${inventario.health}`;
+          antesDeLogica = true;
+          idACambiar = 2.8;
+        }
+        if (turnoHuida == 5) {
+          arrayInput[index].nextid[0] = arrayInput[index].nextid[2];
+          puntaje = puntaje + 10;
+        }
+        break;
       case "Fin":
         salir = true;
         chequeoInput = true;
+        final = new Date();
         break;
     }
   }
@@ -514,28 +603,38 @@ function inputChecker(arrayInput) {
 
   if (arrayInput[index].input) {
     while (!chequeoInput) {
-      ingreso = Number(
-        prompt(arrayInput[index].descripcion + "/n" + inventario.health)
-      );
-      console.log(id);
-      if (
-        (arrayInput[index].id == 0.5 || arrayInput[index].id == 2.5) &&
-        ingreso != 13
-      ) {
-        ingreso = ingreso - 1;
-      }
+      ingreso = prompt(arrayInput[index].descripcion);
       console.log(ingreso);
-      for (let i = 0; i < arrayInput[index].cantidadOpciones; i++) {
-        if (ingreso == i || ingreso == 13) {
-          chequeoInput = true;
-          if (ingreso != 13 && !salir) {
-            if (!antesDeLogica) {
-              descripcionChecker(arrayInput, eliminar, idACambiar);
+      console.log(index);
+      if (
+        ingreso == null ||
+        ingreso === 0 ||
+        ingreso == undefined ||
+        ingreso == ""
+      ) {
+        chequeoInput = false;
+      } else {
+        if (isNaN(ingreso) && ingreso.toUpperCase() == "INVENTARIO") {
+          alert("Acá inventario");
+        } else if (
+          (arrayInput[index].id == 0.5 || arrayInput[index].id == 2.5) &&
+          ingreso != 13 &&
+          ingreso != 14
+        ) {
+          ingreso = ingreso - 1;
+        }
+        for (let i = 0; i < arrayInput[index].cantidadOpciones; i++) {
+          if (ingreso == i || ingreso == 13) {
+            chequeoInput = true;
+            if (ingreso != 13 && !salir) {
+              if (!antesDeLogica) {
+                descripcionChecker(arrayInput, eliminar, idACambiar);
+              }
+              nextIndex(arrayInput, ingreso);
+              inputChecker(arrayInput);
             }
-            nextIndex(arrayInput, ingreso);
-            inputChecker(arrayInput);
+            break;
           }
-          break;
         }
       }
     }
@@ -633,7 +732,7 @@ function registroLogro(id) {
   switch (id) {
     case "Nombre":
       indice = 0;
-      textoLogro = `No diste tu nombre al comienzo de la aventura`;
+      textoLogro = `No diste tu nombre al comienzo de la aventura.`;
       puntajeLogro = -5;
       break;
     case "Voces":
@@ -647,17 +746,17 @@ function registroLogro(id) {
       puntajeLogro = 20;
       break;
     case "Espada":
-      indice = 2;
+      indice = 3;
       textoLogro = `Encontraste la espada secreta en el fondo del lago.`;
       puntajeLogro = 20;
       break;
     case "Puente":
-      indice = 3;
+      indice = 4;
       textoLogro = `Lograste cruzar el puente sin recibir daño.`;
       puntajeLogro = 10;
       break;
     case "Dragón":
-      indice = 4;
+      indice = 5;
       textoLogro = `Derrotaste exitósamente al dragón.`;
       puntajeLogro = 35;
       break;
@@ -669,3 +768,15 @@ function registroLogro(id) {
     logrosID[indice] = true;
   }
 }
+
+
+//Realizar tabla de puntaje... generar por ChatGPT los scores de jugadores, permitir buscar jugadores, y filtrar por logros, puntaje, tiempo, luego de incluir a este jugador (top 5 de 10 por ejemplo).
+//Luego del nombre, ingreso de raza.
+//Poder revisar inventario en cualquier momento, ingresando 'inventario'
+// Humano -> espada
+//humano health 10, combate 5, iniciativa 2, defensa 3
+// Bruja -> más puntos de combate por poción, en el agua no encuentra nada, el vendedor le regala algo (puntos de vida)
+//Barbaro -> pelea con las voces.
+// Por usuario: puntos a distribuir, raza, etc
+//Randomizar los mensajes de combate y huida
+//Array de bruja y dragón no se actualizan. permitir poder ver "Bruja y Dragón en sus respectivos ids? --> enemigo.
