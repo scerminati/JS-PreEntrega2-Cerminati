@@ -22,84 +22,132 @@ let logrosID = [false, false, false, false, false, false];
 let comienzo = new Date();
 let personajes = [
   {
-    nombre: "Williams",
     raza: "Humano",
-    vida: 15,
-    iniciativa: 2,
-    combate: 5,
-    defensa: 3,
-  },
-  {
-    nombre: "Thrall",
-    raza: "Orco",
-    vida: 10,
-    iniciativa: 2,
-    combate: 10,
-    defensa: 3,
-  },
-  {
-    nombre: "Aranion",
-    raza: "Elfo",
-    vida: 11,
-    iniciativa: 5,
-    combate: 5,
-    defensa: 5,
-  },
-  {
-    nombre: "Balin",
-    raza: "Enano",
-    vida: 10,
-    iniciativa: 2,
-    combate: 6,
-    defensa: 5,
-  },
-  {
-    nombre: "Gelbin",
-    raza: "Gnomo",
+    nombre: "Caballero",
     vida: 13,
-    iniciativa: 2,
-    combate: 4,
-    defensa: 6,
+    iniciativa: 0,
+    combate: 2,
+    defensa: 5,
   },
   {
-    nombre: "Grommash",
-    raza: "Orco",
+    raza: "Humano",
+    nombre: "Rogue",
+    vida: 10,
+    iniciativa: 4,
+    combate: 3,
+    defensa: 3,
+  },
+  {
+    raza: "Humano",
+    nombre: "Cazador",
+    vida: 7,
+    iniciativa: 5,
+    combate: 6,
+    defensa: 2,
+  },
+  {
+    raza: "Elfo",
+    nombre: "Bardo",
+    vida: 8,
+    iniciativa: 5,
+    combate: 2,
+    defensa: 5,
+  },
+  {
+    raza: "Elfo",
+    nombre: "Guerrero",
+    vida: 10,
+    iniciativa: 2,
+    combate: 7,
+    defensa: 1,
+  },
+  {
+    raza: "Elfo",
+    nombre: "Profeta",
+    vida: 9,
+    iniciativa: 3,
+    combate: 5,
+    defensa: 3,
+  },
+  {
+    raza: "Elfo",
+    nombre: "Monje",
     vida: 12,
     iniciativa: 2,
-    combate: 6,
-    defensa: 5,
-  },
-  {
-    nombre: "Kanmi",
-    raza: "Elfo",
-    vida: 13,
-    iniciativa: 3,
-    combate: 4,
-    defensa: 5,
-  },
-  {
-    nombre: "Belan",
-    raza: "Enano",
-    vida: 10,
-    iniciativa: 3,
-    combate: 6,
+    combate: 2,
     defensa: 4,
   },
   {
-    nombre: "Mekkatorque",
-    raza: "Gnomo",
-    vida: 15,
+    raza: "Elfo",
+    nombre: "Asesino",
+    vida: 11,
+    iniciativa: 6,
+    combate: 3,
+    defensa: 0,
+  },
+  {
+    raza: "Orco",
+    nombre: "Arquero",
+    vida: 12,
+    iniciativa: 0,
+    combate: 5,
+    defensa: 3,
+  },
+  {
+    raza: "Orco",
+    nombre: "Herrero",
+    vida: 9,
     iniciativa: 4,
+    combate: 6,
+    defensa: 1,
+  },
+  {
+    raza: "Orco",
+    nombre: "Asaltador",
+    vida: 7,
+    iniciativa: 6,
     combate: 4,
     defensa: 3,
   },
   {
-    nombre: "David",
-    raza: "Humano",
-    vida: 14,
+    raza: "Orco",
+    nombre: "Destructor",
+    vida: 9,
+    iniciativa: 2,
+    combate: 7,
+    defensa: 2,
+  },
+  {
+    raza: "Enano",
+    nombre: "Artesano",
+    vida: 11,
+    iniciativa: 1,
+    combate: 2,
+    defensa: 6,
+  },
+  {
+    raza: "Enano",
+    nombre: "Carroñero",
+    vida: 8,
     iniciativa: 4,
     combate: 3,
     defensa: 5,
+  },
+  {
+    raza: "Mago",
+    nombre: "Profeta",
+    vida: 13,
+    iniciativa: 3,
+    combate: 4,
+    defensa: 0,
+  },
+  {
+    raza: "Mago",
+    nombre: "Nigromante",
+    vida: 10,
+    iniciativa: 1,
+    combate: 5,
+    defensa: 4,
   },
 ];
 
@@ -183,11 +231,10 @@ razaSeleccionada.forEach((personaje) => {
   personajesAElegir += `\n`;
 });
 
-///ACÁ VA EL DO WHILE
 let personajeElegido;
 do {
   nombrePersonaje = prompt(
-    `Elije tu personaje, conservarás tu nombre pero tendrás sus stats.\n\n${personajesAElegir}`
+    `Elije tu personaje, ten en cuenta las habilidades de cada uno.\n\n${personajesAElegir}`
   );
   if (typeof nombrePersonaje == "string" && nombrePersonaje != "") {
     nombrePersonaje = nombrePersonaje.replace(
@@ -237,7 +284,7 @@ let dragon = {
 let caminos = [
   {
     id: 0,
-    descripcion: `${nombre}, ¡un gusto conocerte! Has llegado en el momento indicado, necesitamos tu ayuda.\n\nDebes saber que en nuestro reino, Javascra, una terrible amenaza acecha en el temible castillo que tenemos delante.\n\nMira, te mostraré. Sígueme.`,
+    descripcion: `${inventario.nombre}, del reino ${inventario.raza}, ¡un gusto conocerte! Has llegado en el momento indicado, necesitamos tu ayuda.\n\nDebes saber que en nuestro reino, Javascra, una terrible amenaza acecha en el temible castillo que tenemos delante.\n\nMira, te mostraré. Sígueme.`,
     categoria: "Intro",
     input: false,
     cantidadOpciones: 0,
@@ -597,7 +644,9 @@ if (ingreso == 13) {
     unidad = `minutos`;
   }
   alert(
-    `Has conseguido un puntaje total de ${puntaje}/100.\n\nLogros obtenidos durante la aventura:\n${logros.join(
+    `${nombre} del reino ${
+      inventario.raza
+    }, aquí tus estadísitvas de juego.\n\nHas conseguido un puntaje total de ${puntaje}/100.\n\nLogros obtenidos durante la aventura:\n${logros.join(
       " "
     )}\n\nObtuviste un total de ${logrosTotales} de ${
       logros.length
@@ -606,7 +655,7 @@ if (ingreso == 13) {
 
   if (puntaje == 100) {
     alert(
-      `¡JUEGO PERFECTO EN PUNTAJE! Felicidades, ${nombre}, tu nombre será recordado, lamentablemente, por poco tiempo, porque nos quedamos sin tinta para ponerlo en los registros del pueblo.\n\nSin embargo, siempre puedes sacar un ScreenShot de tu resultado y enviarmela.\n\n¡Gracias por jugar!`
+      `¡JUEGO PERFECTO EN PUNTAJE! Felicidades, ${nombre} del reino ${inventario.raza}, tu nombre será recordado, lamentablemente, por poco tiempo, porque nos quedamos sin tinta para ponerlo en los registros del pueblo.\n\nSin embargo, siempre puedes sacar un ScreenShot de tu resultado y enviarmela.\n\n¡Gracias por jugar!`
     );
   }
 }
