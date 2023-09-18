@@ -888,7 +888,6 @@ function modificarNextId(arrayInput, nextIDacambiar, nextID) {
 }
 
 function combate(oponente) {
-  //tirada de iniciativa
   iniciativaPropia = Math.ceil(Math.random() * inventario.iniciativa);
   iniciativaOponente = Math.ceil(Math.random() * oponente.iniciativa);
   if (iniciativaPropia > iniciativaOponente) {
