@@ -646,7 +646,7 @@ if (ingreso == 13) {
   alert(
     `${nombre} del reino ${
       inventario.raza
-    }, aquí tus estadísitvas de juego.\n\nHas conseguido un puntaje total de ${puntaje}/100.\n\nLogros obtenidos durante la aventura:\n${logros.join(
+    }, aquí tus estadísticas de juego.\n\nHas conseguido un puntaje total de ${puntaje}/100.\n\nLogros obtenidos durante la aventura:\n${logros.join(
       " "
     )}\n\nObtuviste un total de ${logrosTotales} de ${
       logros.length
@@ -779,7 +779,7 @@ function inputChecker(arrayInput) {
       case "Huida":
         turnoHuida++;
         inventario.vida =
-          inventario.vida - Math.ceil((Math.random() * dragon.combat) / 2);
+          inventario.vida - Math.ceil((Math.random() * dragon.combate) / 2);
 
         if (inventario.vida <= 0 && turnoHuida <= 5) {
           arrayInput[index].nextid[0] = arrayInput[index].nextid[1];
