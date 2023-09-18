@@ -155,18 +155,14 @@ do {
     )}`
   );
   if (typeof usuarioRaza == "string" && usuarioRaza != "") {
-    console.log("entró en string");
-    console.log(usuarioRaza);
     usuarioRaza = usuarioRaza.replace(usuarioRaza, usuarioRaza.toLowerCase());
     usuarioRaza = usuarioRaza.replace(
       usuarioRaza[0],
       usuarioRaza[0].toUpperCase()
     );
-    console.log(usuarioRaza);
     for (let index = 0; index < categoriaRazas.length; index++) {
       if (categoriaRazas[index] === usuarioRaza) {
         razaEncontrada = true;
-        console.log("entró en raza encontrada");
       }
     }
   }
@@ -203,7 +199,6 @@ do {
         return personaje.nombre.toUpperCase() === nombrePersonaje;
       })
     ) {
-      console.log(" entr'o en personaje sleeccionado");
       personajeElegido = razaSeleccionada.find(
         (personajes) => personajes.nombre.toUpperCase() === nombrePersonaje
       );
@@ -211,9 +206,6 @@ do {
     }
   }
 } while (!inventarioListo);
-
-console.log(personajeElegido);
-console.log(razaSeleccionada);
 
 let inventario = {
   nombre,
@@ -224,8 +216,8 @@ let inventario = {
   defensa: personajeElegido.defensa,
   monedas: 0,
 };
-
 let healthBase = inventario.vida;
+
 let bruja = {
   nombre: "Bruja",
   vida: 8,
@@ -659,7 +651,7 @@ function inputChecker(arrayInput) {
           modificarNextId(arrayInput, idACambiar, [1.21]);
           turno = "";
           turnoContador = 0;
-
+          inventario.combate += 2;
           inventario.vida = healthBase + 5;
         }
         break;
@@ -771,8 +763,6 @@ function inputChecker(arrayInput) {
   if (arrayInput[index].input) {
     while (!chequeoInput) {
       ingreso = prompt(arrayInput[index].descripcion);
-      console.log(ingreso);
-      console.log(index);
       if (
         ingreso == null ||
         ingreso === 0 ||
